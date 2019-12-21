@@ -4,39 +4,31 @@ import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
 import * as axios from 'axios';
-import WeatherGen from './containers/WeatherGen'
+import WeatherGen from './containers/WeatherGen';
+import { getData } from '../actions/apiActions';
+
 
 export default class MyWeatherApp extends Component{
-    state = {
-        location: null,
-        errorMessage: null,
-        long: null,
-        lat: null,
-        temp: null,
-        app_temp: null
-    };
-    componentWillMount() {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            errorMessage: null,
+            temp: null,
+            app_temp: null,
+            city: null,
+            desc: null
+        };
+    }
+    
+    async componentDidMount() {
         if (Platform.OS === 'android' && !Constants.isDevice) {
             this.setState({
                 errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
             });
         } else {
-            this._getLocationAsync();
-        }
-        if (this.state.errorMessage) {
-            console.log(this.state.errorMessage);
-        } else if (this.state.location) {
-            const axios = require('axios');
-            console.log('test');
-            this.state.long = JSON.stringify(this.state.location.coords.longitude);
-            this.state.lat = JSON.stringify(this.state.location.coords.latitude);
-            axios.get("https://api.weatherbit.io/v2.0/current?lat="+this.state.lat+"&lon="+this.state.long+"&lang=fr&key=02070202f3c248b994af9f58c0fad719")
-                .then(function(response){
-                this.state.temp = JSON.stringify(response.data.data[0].temp);
-                this.state.app_temp = JSON.stringify(response.data.data[0].app_temp);
-                console.log(this.state.temp);
-                console.log(this.state.app_temp);
-                });
+            await this._getLocationAsync();
+            this.DisplayData();
         }
     }
     
@@ -47,39 +39,34 @@ export default class MyWeatherApp extends Component{
             errorMessage: 'Permission to access location was denied',
           });
         }
-    
         let location = await Location.getCurrentPositionAsync({});
-        this.setState({ location });
+        this.setState({ location : location.coords });
     };
     
+
+    DisplayData = async () => {
+        const headers = {
+            'lat': this.state.location.latitude,
+            'long': this.state.location.longitude
+        };
+        let list = await getData(headers);
+        this.setState({
+            temp : list.data[0].temp,
+            app_temp: list.data[0].app_temp,
+            city: list.data[0].city_name +' '+ list.data[0].country_code,
+            desc: list.data[0].weather.description
+        })
+        // console.log(list);
+    }
+
     render() {
-        const axios = require('axios');
-        let text = 'Waiting..';
-        let long = '';
-        let lat = '';
-        let temp = '';
-        let app_temp = '';
-        if (this.state.errorMessage) {
-          text = this.state.errorMessage;
-        } else if (this.state.location) {
-            long = JSON.stringify(this.state.location.coords.longitude);
-            lat = JSON.stringify(this.state.location.coords.latitude);
-            axios.get("https://api.weatherbit.io/v2.0/current?lat="+lat+"&lon="+long+"&lang=fr&key=02070202f3c248b994af9f58c0fad719")
-                .then(function(response){
-                temp = JSON.stringify(response.data.data[0].temp);
-                app_temp = JSON.stringify(response.data.data[0].app_temp);
-                console.log(temp);
-                console.log(app_temp);
-            });
-          
-        }
+        // this.DisplayData();
         return (
           <View>
-            <Text style={styles.paragraph}>longitude : {long}</Text>
-            <Text style={styles.paragraph}>latitude : {lat}</Text>
-            <Text style={styles.paragraph}>température : {temp}°</Text>
-            <Text style={styles.paragraph}>ressenti : {app_temp}°</Text>
-            <WeatherGen></WeatherGen>
+            <Text style={styles.paragraph}>Localisation : {this.state.city}</Text>
+            <Text style={styles.paragraph}>température : {this.state.temp}°</Text>
+            <Text style={styles.paragraph}>ressenti : {this.state.app_temp}°</Text>
+            <Text style={styles.paragraph}>{this.state.desc}</Text>
           </View>
         );
     }
