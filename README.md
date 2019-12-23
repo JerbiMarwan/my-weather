@@ -33,9 +33,9 @@ Il s'agit d'un projet de programmation mobile dans le cadre de ma première ann�
 
 <p align="center">
   Thème sombre :<br>
-    <img src="assets/screen-light.jpg" alt="theme-light" width="200"/><br>
+    <img src="assets/screen-dark.jpg" alt="theme-light" width="200"/><br>
   Thème clair :<br>
-    <img src="assets/screen-dark.jpg" alt="theme-light" width="200"/>
+    <img src="assets/screen-light.jpg" alt="theme-light" width="200"/>
 </p>
 <p align="center">
   
