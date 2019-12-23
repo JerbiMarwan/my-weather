@@ -80,4 +80,4 @@ Le projet utilise une architecture **MVC**
 
 ## Auteurs
 
-[Marwan JERBI](https://github.com/JerbiMarwan), 
+[Marwan JERBI](https://github.com/JerbiMarwan)
