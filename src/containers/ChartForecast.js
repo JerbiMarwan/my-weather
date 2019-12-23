@@ -4,7 +4,7 @@ import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
 import * as axios from 'axios';
-import { getDataForecast } from '../../actions/apiActions';
+import { getDataForecast, getDataForecastByCity } from '../../actions/apiActions';
 import { BarChart, Grid } from 'react-native-svg-charts'
 import * as shape from 'd3-shape'
 import { Text } from 'react-native-svg'
@@ -12,7 +12,6 @@ import { Text } from 'react-native-svg'
 
 
 export default class ChartForcast extends Component{
-    
     constructor(props) {
         super(props);
         this.state = {
@@ -25,7 +24,6 @@ export default class ChartForcast extends Component{
     async componentDidMount() {
         var jour = new Date();
         var heure = jour.getHours();
-        console.log(heure);
         if(heure > 19){
             this.setState({
                 chart_color: 'rgba(29, 32, 96, 0.5)'
@@ -45,6 +43,10 @@ export default class ChartForcast extends Component{
         }
     }
 
+    testFunction = () => {
+        console.log('test child component')
+    }
+
     _getLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
         if (status !== 'granted') {
@@ -62,7 +64,6 @@ export default class ChartForcast extends Component{
             'long': this.state.location.longitude
         };
         let list = await getDataForecast(headers);
-        // console.log(list.data);
         let data_stock= [];
         for(var i = 0; i<list.data.length; i++){
             data_stock.push(list.data[i].temp);
@@ -72,8 +73,21 @@ export default class ChartForcast extends Component{
         })
     }
 
+    DisplayDataForecastByCity = async (city) => {
+        console.log(city);
+        let list = await getDataForecastByCity(city);
+        let data_stock= [];
+        for(var i = 0; i<list.data.length; i++){
+            data_stock.push(list.data[i].temp);
+        }
+        console.log(data_stock);
+        this.state.forecast = data_stock;
+        console.log(this.state.forecast);
+        this.forceUpdate();
+    }
+
     render() {
-        // const fill = 'rgba(60, 66, 192, 0.5)'
+
         const fill = this.state.chart_color;
         const data = this.state.forecast;
         const CUT_OFF = 0

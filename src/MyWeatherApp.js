@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, Image, SafeAreaView, ScrollView, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, ScrollView, AsyncStorage, TextInput } from 'react-native';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
 import * as axios from 'axios';
 import ChartForcast from './containers/ChartForecast';
 import Details from './containers/Details';
-import { getData } from '../actions/apiActions';
+import { getData, getDataByCity } from '../actions/apiActions';
 import { LinearGradient } from 'expo-linear-gradient';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 
 export default class MyWeatherApp extends Component{
 
@@ -18,21 +18,21 @@ export default class MyWeatherApp extends Component{
             errorMessage: null,
             temp: null,
             app_temp: null,
-            city: null,
+            city_name: null,
             desc: null,
             last_update: null,
             icon: null,
             dark_theme: ["#1d2060", "#0e2c67", "#00376c", "#00416f", "#004a71", "#0d5175", "#19587a", "#235f7e", "#2c6788", "#356e93", "#3f769d", "#487ea8"],
             light_theme: ["#3c42c0", "#215acf", "#0070db", "#0084e4", "#0097ea", "#22a2ec", "#39acee", "#4db6f0", "#63bbf2", "#75c0f3", "#85c6f5", "#94cbf6"],
             theme: [],
-            bg_color: null
+            bg_color: null,
+            city: null
         };
     }
     
     async componentDidMount() {
         var jour = new Date();
         var heure = jour.getHours();
-        console.log(heure);
         if(heure > 19){
             this.setState({
                 theme: this.state.dark_theme,
@@ -54,6 +54,7 @@ export default class MyWeatherApp extends Component{
         }
     }
     
+
     _getLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
         if (status !== 'granted') {
@@ -72,8 +73,20 @@ export default class MyWeatherApp extends Component{
         } catch (error) {
           // Error saving data
         }
-      };
+    };
     
+    DisplayDataByCity = async (city) => {
+        let list = await getDataByCity(city);
+        this.setState({
+            temp : list.data[0].temp,
+            app_temp: list.data[0].app_temp,
+            city_name: list.data[0].city_name +' - '+ list.data[0].country_code,
+            desc: list.data[0].weather.description,
+            last_update: list.data[0].ob_time.slice(11),
+            icon: list.data[0].weather.icon
+        });
+        new ChartForcast().DisplayDataForecastByCity(city);
+    }
 
     DisplayData = async () => {
         const headers = {
@@ -81,16 +94,14 @@ export default class MyWeatherApp extends Component{
             'long': this.state.location.longitude
         };
         let list = await getData(headers);
-        // console.log(list);
         this.setState({
             temp : list.data[0].temp,
             app_temp: list.data[0].app_temp,
-            city: list.data[0].city_name +' - '+ list.data[0].country_code,
+            city_name: list.data[0].city_name +' - '+ list.data[0].country_code,
             desc: list.data[0].weather.description,
             last_update: list.data[0].ob_time.slice(11),
             icon: list.data[0].weather.icon
         })
-        // console.log(list);
     }
 
     render() {
@@ -101,8 +112,16 @@ export default class MyWeatherApp extends Component{
                 // colors={["#3c42c0", "#215acf", "#0070db", "#0084e4", "#0097ea", "#22a2ec", "#39acee", "#4db6f0", "#63bbf2", "#75c0f3", "#85c6f5", "#94cbf6"]}
                 colors={this.state.theme}
                 style={{ padding: 15, alignItems: 'center', height: "100%", width: "100%"}}>
+                <View style={{flexDirection:"row"}}>
+                    <TextInput
+                        style={{ height: 40, backgroundColor: "rgba(255,255,255,0.2)", width: "70%", borderRadius: 5, padding: 5, color:'#fff'}}
+                        placeholder="Entrez une ville"
+                        onChangeText={(text) => this.setState({city: text})}
+                    />
+                    <AntDesign name="search1" size={30} color="rgba(255,255,255, 0.5)" style={{paddingTop: 5, paddingLeft: 5}} onPress={(e) => this.DisplayDataByCity(this.state.city)} />
+                </View>
                 <View style={styles.dataContainer}>
-                    <Text style={styles.paragraph}><MaterialIcons name="location-on" size={20} color="rgb(255,255,255)" />{this.state.city}</Text>
+                    <Text style={styles.paragraph}><MaterialIcons name="location-on" size={20} color="rgb(255,255,255)" />{this.state.city_name}</Text>
                     <View style={{flexDirection:"row", alignContent:"center"}}>
                         <Image
                             style={{width: 75, height: 75}}
@@ -112,7 +131,6 @@ export default class MyWeatherApp extends Component{
                         <Text style={styles.paragraph, {fontSize:10, color:'rgb(255,255,255)', marginTop:35}}> à {this.state.last_update}</Text>
                     </View>
                     
-                    {/* <Text style={styles.paragraph}>ressenti : {this.state.app_temp}°</Text> */}
                     
                 </View>
                 <Details></Details>
@@ -120,10 +138,7 @@ export default class MyWeatherApp extends Component{
                     <Text style={styles.paragraph}>Prévisions sur 5 jours : </Text>
                     <ChartForcast></ChartForcast>
                 </View>
-                {/* <View style={styles.dataContainer}>
-                    <Text style={styles.paragraph}>Prévisions sur 5 jours : </Text>
-                    <ChartForcast></ChartForcast>
-                </View> */}
+               
             </LinearGradient>
           </View>
         );

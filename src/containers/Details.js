@@ -61,7 +61,6 @@ export default class Details extends Component{
             'long': this.state.location.longitude
         };
         let list = await getData(headers);
-        console.log(list);
         this.setState({
             wind : list.data[0].wind_spd,
             app_temp: list.data[0].app_temp,
