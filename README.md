@@ -75,3 +75,9 @@ Le projet utilise une architecture **MVC**
     <li>Vue : Ce que l'utilisateur voit lorsqu'il accède à l'application dans le répertoire /src/containers</li>
     <li>Controlleur : Partie Serveur du projet dans le fichier actions/apiActions.js qui fais la Passerelle entre le modèle et la vue</li>
 </ul>
+
+---
+
+## Auteurs
+
+[Marwan JERBI](https://github.com/JerbiMarwan), 
