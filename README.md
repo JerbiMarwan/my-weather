@@ -46,7 +46,6 @@ Il s'agit d'un projet de programmation mobile dans le cadre de ma première ann�
 
 ## Setup
 
-<i>Disclaimer : these are the instructions to run it on your phone using a cable connected to the computer, you may change these using how you want to run the project.</i>
 <i>Attention : ce sont les instruction pour lancer l'application sur votre téléphone connecté via un câble usb à votre ordinateur.</i>
 
 <ol>
