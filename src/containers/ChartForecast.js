@@ -69,12 +69,12 @@ export default class ChartForcast extends Component{
                     key={ index }
                     x={ x(index) + (bandwidth / 2) }
                     y={ value < CUT_OFF ? y(value) - 10 : y(value) + 15 }
-                    fontSize={ 14 }
+                    fontSize={ 13 }
                     fill={ value >= CUT_OFF ? 'white' : 'black' }
                     alignmentBaseline={ 'middle' }
                     textAnchor={ 'middle' }
                 >
-                    {value}°
+                    {value}
                 </Text>
             ))
         )
