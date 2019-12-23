@@ -62,6 +62,7 @@ Il s'agit d'un projet de programmation mobile dans le cadre de ma premi√®re ann√
 **Back-end** : Node.JS Axios <br />
 **Front-end** : React Native w/ Redux <br />
 **Database** : Weatherbit API <br />
+**IDE** : VisualStudio Code <br />
 
 ---
 
