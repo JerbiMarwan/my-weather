@@ -17,11 +17,24 @@ export default class ChartForcast extends Component{
         super(props);
         this.state = {
             errorMessage: null,
-            forecast: []
+            forecast: [],
+            chart_color: null
         };
     }
 
     async componentDidMount() {
+        var jour = new Date();
+        var heure = jour.getHours();
+        console.log(heure);
+        if(heure > 19){
+            this.setState({
+                chart_color: 'rgba(29, 32, 96, 0.5)'
+            })
+        }else{
+            this.setState({
+                chart_color: 'rgba(60, 66, 192, 0.5)'
+            })
+        }
         if (Platform.OS === 'android' && !Constants.isDevice) {
             this.setState({
                 errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
@@ -60,7 +73,8 @@ export default class ChartForcast extends Component{
     }
 
     render() {
-        const fill = 'rgba(134, 65, 244, 0.5)'
+        // const fill = 'rgba(60, 66, 192, 0.5)'
+        const fill = this.state.chart_color;
         const data = this.state.forecast;
         const CUT_OFF = 0
         const Labels = ({ x, y, bandwidth, data }) => (
@@ -74,7 +88,7 @@ export default class ChartForcast extends Component{
                     alignmentBaseline={ 'middle' }
                     textAnchor={ 'middle' }
                 >
-                    {value}
+                    {value}°
                 </Text>
             ))
         )

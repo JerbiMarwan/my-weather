@@ -21,11 +21,29 @@ export default class MyWeatherApp extends Component{
             city: null,
             desc: null,
             last_update: null,
-            icon: null
+            icon: null,
+            dark_theme: ["#1d2060", "#0e2c67", "#00376c", "#00416f", "#004a71", "#0d5175", "#19587a", "#235f7e", "#2c6788", "#356e93", "#3f769d", "#487ea8"],
+            light_theme: ["#3c42c0", "#215acf", "#0070db", "#0084e4", "#0097ea", "#22a2ec", "#39acee", "#4db6f0", "#63bbf2", "#75c0f3", "#85c6f5", "#94cbf6"],
+            theme: [],
+            bg_color: null
         };
     }
     
     async componentDidMount() {
+        var jour = new Date();
+        var heure = jour.getHours();
+        console.log(heure);
+        if(heure > 19){
+            this.setState({
+                theme: this.state.dark_theme,
+                bg_color: '#1D2060'
+            })
+        }else{
+            this.setState({
+                theme: this.state.light_theme,
+                bg_color: '#3c42c0'
+            })
+        }
         if (Platform.OS === 'android' && !Constants.isDevice) {
             this.setState({
                 errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
@@ -63,7 +81,7 @@ export default class MyWeatherApp extends Component{
             'long': this.state.location.longitude
         };
         let list = await getData(headers);
-        console.log(list);
+        // console.log(list);
         this.setState({
             temp : list.data[0].temp,
             app_temp: list.data[0].app_temp,
@@ -78,9 +96,10 @@ export default class MyWeatherApp extends Component{
     render() {
         // this.DisplayData();
         return (
-          <View style={styles.container}>
+          <View style={{height: "100%", alignItems: 'center', justifyContent: 'center', paddingTop: Constants.statusBarHeight, backgroundColor: this.state.bg_color,}}>
             <LinearGradient
-                colors={["#2b2b86", "#40399c", "#5547b2", "#6a55c8", "#7f64df", "#8f6ee9", "#9f78f3", "#af82fd", "#bc89fc", "#c790fc", "#d297fc", "#dc9ffc"]}
+                // colors={["#3c42c0", "#215acf", "#0070db", "#0084e4", "#0097ea", "#22a2ec", "#39acee", "#4db6f0", "#63bbf2", "#75c0f3", "#85c6f5", "#94cbf6"]}
+                colors={this.state.theme}
                 style={{ padding: 15, alignItems: 'center', height: "100%", width: "100%"}}>
                 <View style={styles.dataContainer}>
                     <Text style={styles.paragraph}><MaterialIcons name="location-on" size={20} color="rgb(255,255,255)" />{this.state.city}</Text>
@@ -118,7 +137,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingTop: Constants.statusBarHeight,
-        backgroundColor: '#2b2b86',
+        // backgroundColor: '#3c42c0',
+        backgroundColor: '#1D2060',
     },
     paragraph: {
         margin: 24,
