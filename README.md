@@ -13,7 +13,7 @@ my-weather
 ---
 ## Contexte
 
-Il s'agit d'un projet de programmation mobile sur plusieurs semaines dans le cadre de ma première année de cycle d'ingénieur à l'ESIEA
+Il s'agit d'un projet de programmation mobile dans le cadre de ma première année de cycle d'ingénieur à l'ESIEA
 
 ---
 
