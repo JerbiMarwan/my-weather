@@ -24,6 +24,7 @@ Il s'agit d'un projet de programmation mobile dans le cadre de ma première ann�
     <li>Requêtes vers l'API WeatherBit avec Axios</li>
     <li>Affichage de la météo du jour avec détails</li>
     <li>Affichage sous forme de graphique des prévisions sur 5 jours</li>
+    <li>changement de localisation avec recherche de ville textuelle</li>
 </ul>
 
 ---
