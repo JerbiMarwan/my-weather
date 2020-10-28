@@ -46,7 +46,7 @@ Il s'agit d'un projet de programmation mobile dans le cadre de ma première ann�
 
 ## Setup
 
-<i>Attention : ce sont les instruction pour lancer l'application sur votre téléphone connecté via un câble usb à votre ordinateur.</i>
+<i>Attention : ce sont les instructions pour lancer l'application sur votre téléphone connecté via un câble usb à votre ordinateur.</i>
 
 <ol>
     <li>Assurez-vous d'avoir Node.js et Expo-cli intallés sur votre ordinateur</li>
