@@ -70,11 +70,6 @@ Il s'agit d'un projet de programmation mobile dans le cadre de ma première ann�
 ## Architecture of the project
 
 Le projet utilise une architecture **MVC**
-<ul>
-    <li>Modèle : L'API qui nous fournis les données (WeatherBit)</li>
-    <li>Vue : Ce que l'utilisateur voit lorsqu'il accède à l'application dans le répertoire /src/containers</li>
-    <li>Controlleur : Partie Serveur du projet dans le fichier actions/apiActions.js qui fais la Passerelle entre le modèle et la vue</li>
-</ul>
 
 ---
 
